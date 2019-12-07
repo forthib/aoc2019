@@ -1,4 +1,4 @@
-#include "intersection.h"
+#include "io.h"
 
 #include <fstream>
 
@@ -36,7 +36,7 @@ namespace io
 		return result;
 	}
 
-	std::vector<int> readIntegers(const std::string& fileName, const std::string& separators)
+	std::vector<int> readIntegers(const std::string& fileName)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
 
@@ -80,7 +80,7 @@ namespace io
 		return values;
 	}
 
-	std::vector<std::vector<std::string>> readLinesOfStrings(const std::string& fileName, const std::string& separators = ",")
+	std::vector<std::vector<std::string>> readLinesOfStrings(const std::string& fileName, const std::string& separators)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
 

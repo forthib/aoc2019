@@ -1,8 +1,6 @@
 #include "orbits.h"
 #include "io.h"
 
-#include <fstream>
-
 namespace
 {
 	std::vector<std::array<std::string, 2>> read(const std::string& fileName)

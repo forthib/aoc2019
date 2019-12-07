@@ -54,30 +54,25 @@ namespace opcode
 			binaryOp(code, position, [](auto a, auto b) { return a * b; });
 		}
 
-		void readInput(std::vector<int>& code, int& position)
+		void readInput(std::vector<int>& code, int& position, const std::function<int()>& inputFunction)
 		{
 			const auto pModes = decodePModes(code[position]);
 
 			if (pModes.pMode1 != 0)
 				throw std::exception{ "unsupported parameter mode for first argument" };
-			
-			std::cout << "Input:";
-			int input;
-			std::cin >> input;
-			
+
 			int& value = getValue(code, position + 1, pModes.pMode1);
-			value = input;
+			value = inputFunction();
 
 			position += 2;
 		}
 
-		void writeOutput(std::vector<int>& code, int& position)
+		void writeOutput(std::vector<int>& code, int& position, const std::function<void(int)>& outputFunction)
 		{
 			const auto pModes = decodePModes(code[position]);
 
 			const int value = getValue(code, position + 1, pModes.pMode1);
-
-			std::cout << value << "\n";
+			outputFunction(value);
 
 			position += 2;
 		}
@@ -86,7 +81,7 @@ namespace opcode
 		void jumpIf(std::vector<int>& code, int& position, Predicate pred)
 		{
 			const auto pModes = decodePModes(code[position]);
-			
+
 			const int value1 = getValue(code, position + 1, pModes.pMode1);
 			const int value2 = getValue(code, position + 2, pModes.pMode2);
 
@@ -117,11 +112,43 @@ namespace opcode
 		}
 	}
 
-
 	std::vector<int> decode(std::vector<int> code)
 	{
+		const auto inputFunction = []() {
+			std::cout << "Input:";
+			int input;
+			std::cin >> input;
+			return input;
+		};
+
+		const auto outputFunction = [](int value)
+		{
+			std::cout << value << "\n";
+		};
+
+		return decode(std::move(code), inputFunction, outputFunction);
+	}
+
+	std::vector<int> decode(std::vector<int> code, std::vector<int>& inputs, std::vector<int>& outputs)
+	{
+		const auto inputFunction = [&inputs]() {
+			const int value = inputs.front();
+			inputs.erase(inputs.begin());
+			return value;
+		};
+
+		const auto outputFunction = [&outputs](int value)
+		{
+			outputs.push_back(value);
+		};
+
+		return decode(std::move(code), inputFunction, outputFunction);
+	}
+
+	std::vector<int> decode(std::vector<int> code, const std::function<int()>& inputFunction, const std::function<void(int)>& outputFunction)
+	{
 		int position = 0;
-		for(;;)
+		for (;;)
 		{
 			const int instruction = code[position] % 100;
 			if (instruction == 99)
@@ -136,10 +163,10 @@ namespace opcode
 				multiply(code, position);
 				break;
 			case 3:
-				readInput(code, position);
+				readInput(code, position, inputFunction);
 				break;
 			case 4:
-				writeOutput(code, position);
+				writeOutput(code, position, outputFunction);
 				break;
 			case 5:
 				jumpIfTrue(code, position);

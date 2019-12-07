@@ -1,11 +1,13 @@
+include_directories("C:\\TFO\\CIVA_DK\\CIVA_DK_64_dev_003\\outilsExternes\\Boost\\boost_1_64_0a")
+include_directories("C:\\TFO\\CIVA_DK\\CIVA_DK_64_dev_003\\outilsExternes\\tbb_2018_1\\include")
+link_directories("C:\\TFO\\CIVA_DK\\CIVA_DK_64_dev_003\\outilsExternes\\tbb_2018_1\\lib\\intel64")
+
 add_library (IO io.cpp io.h)
 add_library (Fuel fuel.cpp fuel.h)
 add_library (OpCode opcode.cpp opcode.h)
 add_library (Intersection intersection.cpp intersection.h)
 add_library (Password password.cpp password.h)
 add_library (Orbits orbits.cpp orbits.h)
-
-include_directories(Orbits PRIVATE "C:\\TFO\\CIVA_DK\\CIVA_DK_64_dev_003\\outilsExternes\\Boost\\boost_1_64_0a")
 
 add_executable (Day1 day1.cpp)
 target_link_libraries (Day1 Fuel IO)
@@ -24,3 +26,7 @@ target_link_libraries (Day5 OpCode IO)
 
 add_executable (Day6 day6.cpp)
 target_link_libraries (Day6 Orbits IO)
+link_libraries (OpCode IO)
+
+add_executable (Day7 day7.cpp)
+target_link_libraries (Day7 OpCode IO)
