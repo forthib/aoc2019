@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace opcode2
+namespace opcode
 {
 	std::vector<int> decode(std::vector<int> code);
 }

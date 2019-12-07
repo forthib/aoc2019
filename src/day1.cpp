@@ -1,21 +1,16 @@
 #include "fuel.h"
-
-#include <fstream>
-#include <iostream>
+#include "io.h"
 
 int main(int argc, char* argv[])
 {
-	auto in = std::ifstream{ R"(C:\TFO\REPOS\aoc2019\data\day1\input.txt)" };
+	const auto input = io::readIntegers("day1_input.txt");
 
 	size_t totalFuelSimple = 0;
 	size_t totalFuel = 0;
-	while (!in.eof())
+	for (const size_t mass : input)
 	{
-		size_t mass;
-		if (in >> mass) {
-			totalFuelSimple += fuel::fromMass(mass, false);
-			totalFuel += fuel::fromMass(mass, true);
-		}
+		totalFuelSimple += fuel::fromMass(mass, false);
+		totalFuel += fuel::fromMass(mass, true);
 	}
 
 	std::cout << "14 -> " << fuel::fromMass(14, true) << "\n";

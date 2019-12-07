@@ -1,8 +1,8 @@
-#include "opcode2.h"
+#include "opcode.h"
 
 #include <iostream>
 
-namespace opcode2
+namespace opcode
 {
 	namespace
 	{
