@@ -8,6 +8,7 @@ add_library (OpCode opcode.cpp opcode.h)
 add_library (Intersection intersection.cpp intersection.h)
 add_library (Password password.cpp password.h)
 add_library (Orbits orbits.cpp orbits.h)
+add_library (Image image.cpp image.h)
 
 add_executable (Day1 day1.cpp)
 target_link_libraries (Day1 Fuel IO)
@@ -26,7 +27,9 @@ target_link_libraries (Day5 OpCode IO)
 
 add_executable (Day6 day6.cpp)
 target_link_libraries (Day6 Orbits IO)
-link_libraries (OpCode IO)
 
 add_executable (Day7 day7.cpp)
 target_link_libraries (Day7 OpCode IO)
+
+add_executable (Day8 day8.cpp)
+target_link_libraries (Day8 Image IO)

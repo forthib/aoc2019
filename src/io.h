@@ -12,6 +12,8 @@ namespace io
 
 	std::vector<int> readLineOfIntegers(const std::string& fileName, const std::string& separators = ",");
 
+	std::vector<int> readLineOfDigits(const std::string& fileName);
+
 	std::vector<std::string> readLinesOfString(const std::string& fileName);
 
 	std::vector<std::vector<std::string>> readLinesOfStrings(const std::string& fileName, const std::string& separators = ",");

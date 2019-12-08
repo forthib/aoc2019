@@ -65,6 +65,19 @@ namespace io
 		return values;
 	}
 
+	std::vector<int> readLineOfDigits(const std::string& fileName)
+	{
+		auto in = std::ifstream{ getFilePath(fileName) };
+
+		std::string line;
+		std::getline(in, line);
+
+		auto values = std::vector<int>{};
+		for (const char c : line)
+			values.push_back(static_cast<int>(c - '0'));
+		return values;
+	}
+
 	std::vector<std::string> readLinesOfString(const std::string& fileName)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
