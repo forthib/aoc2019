@@ -6,11 +6,11 @@ namespace image
 {
 	namespace
 	{
-		std::vector<std::vector<int>> splitLayers(size_t width, size_t height, const std::vector<int>& data)
+		std::vector<std::vector<std::int64_t>> splitLayers(size_t width, size_t height, const std::vector<std::int64_t>& data)
 		{
 			const size_t nLayers = data.size() / (width * height);
 
-			auto layers = std::vector<std::vector<int>>(nLayers);
+			auto layers = std::vector<std::vector<std::int64_t>>(nLayers);
 			for (size_t iLayer = 0; iLayer < nLayers; ++iLayer)
 			{
 				layers[iLayer].resize(width * height);
@@ -27,11 +27,11 @@ namespace image
 			return layers;
 		}
 
-		std::vector<int> stack(size_t width, size_t height, const std::vector<std::vector<int>>& layers)
+		std::vector<std::int64_t> stack(size_t width, size_t height, const std::vector<std::vector<std::int64_t>>& layers)
 		{
 			const size_t nLayers = layers.size();
 
-			auto stacked = std::vector<int>(width * height, 0);
+			auto stacked = std::vector<std::int64_t>(width * height, 0);
 			for (size_t j = 0; j < height; ++j)
 			{
 				for (size_t i = 0; i < width; ++i)
@@ -51,7 +51,7 @@ namespace image
 		}
 	}
 
-	void check(size_t width, size_t height, const std::vector<int>& data)
+	void check(size_t width, size_t height, const std::vector<std::int64_t>& data)
 	{
 		const auto layers = splitLayers(width, height, data);
 
@@ -76,7 +76,7 @@ namespace image
 		std::cout << "Check value: " << checkValue << "\n\n";
 	}
 
-	void displayRaw(size_t width, size_t height, const std::vector<int>& data)
+	void displayRaw(size_t width, size_t height, const std::vector<std::int64_t>& data)
 	{
 		const auto layers = splitLayers(width, height, data);
 
@@ -96,7 +96,7 @@ namespace image
 		}
 	}
 
-	void displayDecoded(size_t width, size_t height, const std::vector<int>& data, bool pretty)
+	void displayDecoded(size_t width, size_t height, const std::vector<std::int64_t>& data, bool pretty)
 	{
 		const auto layers = splitLayers(width, height, data);
 		const auto stackedData = stack(width, height, layers);

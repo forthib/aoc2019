@@ -1,13 +1,15 @@
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <vector>
 
-namespace opcode
-{
-	std::vector<int> decode(std::vector<int> code);
-	
-	std::vector<int> decode(std::vector<int> code, std::vector<int>& inputs, std::vector<int>& outputs);
-	
-	std::vector<int> decode(std::vector<int> code, const std::function<int()>& inputFunction, const std::function<void(int)>& outputFunction);
+namespace opcode {
+	std::vector<std::int64_t> run(const std::vector<std::int64_t>& code);
+	std::vector<std::int64_t> run(const std::vector<std::int64_t>& code, const std::vector<std::int64_t>& inputs);
+	std::vector<std::int64_t> run(std::vector<std::int64_t>& code);
+	std::vector<std::int64_t> run(std::vector<std::int64_t>& code, const std::vector<std::int64_t>& inputs);
+
+	void run(std::vector<std::int64_t>& code, std::vector<std::int64_t>& inputs, std::vector<std::int64_t>& outputs);
+	void run(std::vector<std::int64_t>& code, std::function<std::int64_t()> inputFunction, std::function<void(std::int64_t)> outputFunction);
 }

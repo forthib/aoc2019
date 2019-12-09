@@ -4,6 +4,6 @@
 
 namespace password
 {
-	bool isValid(size_t number);
-	bool isValid(size_t number, std::vector<size_t>& buffer);
+	bool isValid(size_t number, bool strictAdjacency);
+	bool isValid(size_t number, bool strictAdjacency, std::vector<size_t>& buffer);
 }

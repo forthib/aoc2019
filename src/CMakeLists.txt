@@ -2,6 +2,7 @@ include_directories("C:\\TFO\\CIVA_DK\\CIVA_DK_64_dev_003\\outilsExternes\\Boost
 include_directories("C:\\TFO\\CIVA_DK\\CIVA_DK_64_dev_003\\outilsExternes\\tbb_2018_1\\include")
 link_directories("C:\\TFO\\CIVA_DK\\CIVA_DK_64_dev_003\\outilsExternes\\tbb_2018_1\\lib\\intel64")
 
+add_library (Test test.cpp test.h)
 add_library (IO io.cpp io.h)
 add_library (Fuel fuel.cpp fuel.h)
 add_library (OpCode opcode.cpp opcode.h)
@@ -11,25 +12,28 @@ add_library (Orbits orbits.cpp orbits.h)
 add_library (Image image.cpp image.h)
 
 add_executable (Day1 day1.cpp)
-target_link_libraries (Day1 Fuel IO)
+target_link_libraries (Day1 Fuel IO Test)
 
 add_executable (Day2 day2.cpp)
-target_link_libraries (Day2 OpCode IO)
+target_link_libraries (Day2 OpCode IO Test)
 
 add_executable (Day3 day3.cpp)
-target_link_libraries (Day3 Intersection IO)
+target_link_libraries (Day3 Intersection IO Test)
 
 add_executable (Day4 day4.cpp)
-target_link_libraries (Day4 Password)
+target_link_libraries (Day4 Password Test)
 
 add_executable (Day5 day5.cpp)
-target_link_libraries (Day5 OpCode IO)
+target_link_libraries (Day5 OpCode IO Test)
 
 add_executable (Day6 day6.cpp)
-target_link_libraries (Day6 Orbits IO)
+target_link_libraries (Day6 Orbits IO Test)
 
 add_executable (Day7 day7.cpp)
-target_link_libraries (Day7 OpCode IO)
+target_link_libraries (Day7 OpCode IO Test)
 
 add_executable (Day8 day8.cpp)
-target_link_libraries (Day8 Image IO)
+target_link_libraries (Day8 Image IO Test)
+
+add_executable (Day9 day9.cpp)
+target_link_libraries (Day9 OpCode IO Test)

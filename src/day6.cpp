@@ -1,5 +1,6 @@
 #include "orbits.h"
 #include "io.h"
+#include "test.h"
 
 namespace
 {
@@ -21,10 +22,11 @@ int main(int argc, char* argv[])
 	const auto test2 = read("day6_test2.txt");
 	const auto input = read("day6_input.txt");
 
-	std::cout << orbits::count(test1) << "\n";
-	std::cout << orbits::count(input) << "\n";
-	std::cout << orbits::shortest(test2, "YOU", "SAN") << "\n";
-	std::cout << orbits::shortest(input, "YOU", "SAN") << "\n";
+	test::equals(orbits::count(test1), 42);
+	std::cout << "Part 1: " << orbits::count(input) << "\n";
+	
+	test::equals(orbits::shortest(test2, "YOU", "SAN"), 4);
+	std::cout << "Part 2: " << orbits::shortest(input, "YOU", "SAN") << "\n";
 
 	std::cin.get();
 }

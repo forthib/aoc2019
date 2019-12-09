@@ -1,6 +1,7 @@
 #include "io.h"
 
 #include <fstream>
+#include <sstream>
 
 namespace io
 {
@@ -36,21 +37,21 @@ namespace io
 		return result;
 	}
 
-	std::vector<int> readIntegers(const std::string& fileName)
+	std::vector<std::int64_t> readIntegers(const std::string& fileName)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
 
-		auto values = std::vector<int>{};
+		auto values = std::vector<std::int64_t>{};
 		while (!in.eof())
 		{
-			int value;
+			std::int64_t value;
 			if (in >> value)
 				values.push_back(value);
 		}
 		return values;
 	}
 
-	std::vector<int> readLineOfIntegers(const std::string& fileName, const std::string& separators)
+	std::vector<std::int64_t> readLineOfIntegers(const std::string& fileName, const std::string& separators)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
 
@@ -59,22 +60,22 @@ namespace io
 
 		const auto strValues = split(line, separators);
 
-		auto values = std::vector<int>{};
+		auto values = std::vector<std::int64_t>{};
 		for (const auto& strValue : strValues)
 			values.push_back(std::atoi(strValue.c_str()));
 		return values;
 	}
 
-	std::vector<int> readLineOfDigits(const std::string& fileName)
+	std::vector<std::int64_t> readLineOfDigits(const std::string& fileName)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
 
 		std::string line;
 		std::getline(in, line);
 
-		auto values = std::vector<int>{};
+		auto values = std::vector<std::int64_t>{};
 		for (const char c : line)
-			values.push_back(static_cast<int>(c - '0'));
+			values.push_back(static_cast<std::int64_t>(c - '0'));
 		return values;
 	}
 
@@ -108,7 +109,7 @@ namespace io
 		return values;
 	}
 
-	void display(std::ostream& out, const std::vector<int>& values)
+	void display(std::ostream& out, const std::vector<std::int64_t>& values, const std::string& suffix)
 	{
 		out << "[";
 		if (!values.empty())
@@ -117,6 +118,13 @@ namespace io
 			for (size_t i = 1; i < values.size(); ++i)
 				out << ", " << values[i];
 		}
-		out << "]\n";
+		out << "]" << suffix;
+	}
+
+	std::string toString(const std::vector<std::int64_t>& values)
+	{
+		std::ostringstream out;
+		display(out, values, "");
+		return out.str();
 	}
 }
