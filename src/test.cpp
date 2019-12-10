@@ -12,16 +12,4 @@ namespace test {
 		if (value)
 			throw std::exception{ "value is not false" };
 	}
-
-	void equals(std::int64_t value, std::int64_t expectedValue)
-	{
-		if (value != expectedValue)
-			throw std::exception{ "value and expected value are different" };
-	}
-
-	void equals(const std::vector<std::int64_t>& values, const std::vector<std::int64_t>& expectedValues)
-	{
-		if (values != expectedValues)
-			throw std::exception{ "values and expected values are different" };
-	}
 }

@@ -3,27 +3,18 @@
 #include <fstream>
 #include <sstream>
 
-namespace io
-{
-	namespace
-	{
-		std::string getFilePath(const std::string& fileName)
-		{
-			return R"(C:\TFO\REPOS\aoc2019\data\)" + fileName;
-		}
+namespace io {
+	namespace {
+		std::string getFilePath(const std::string& fileName) { return R"(C:\TFO\REPOS\aoc2019\data\)" + fileName; }
 
-		bool contains(const std::string& s, char c)
-		{
-			return std::find(s.begin(), s.end(), c) != s.end();
-		}
+		bool contains(const std::string& s, char c) { return std::find(s.begin(), s.end(), c) != s.end(); }
 	}
 
 	std::vector<std::string> split(const std::string& s, const std::string& separators)
 	{
 		std::vector<std::string> result;
 
-		for (auto it = begin(s);; ++it)
-		{
+		for (auto it = begin(s);; ++it) {
 			auto first = it;
 			while (it != end(s) && !contains(separators, *it))
 				++it;
@@ -42,8 +33,7 @@ namespace io
 		auto in = std::ifstream{ getFilePath(fileName) };
 
 		auto values = std::vector<std::int64_t>{};
-		while (!in.eof())
-		{
+		while (!in.eof()) {
 			std::int64_t value;
 			if (in >> value)
 				values.push_back(value);
@@ -79,13 +69,29 @@ namespace io
 		return values;
 	}
 
+	std::vector<std::vector<char>> readLinesOfChars(const std::string& fileName)
+	{
+		auto in = std::ifstream{ getFilePath(fileName) };
+
+		auto values = std::vector<std::vector<char>>{};
+		while (!in.eof()) {
+			std::string line;
+			std::getline(in, line);
+			if (!line.empty()) {
+				values.emplace_back();
+				for (const char c : line)
+					values.back().push_back(c);
+			}
+		}
+		return values;
+	}
+
 	std::vector<std::string> readLinesOfString(const std::string& fileName)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
 
 		auto values = std::vector<std::string>{};
-		while (!in.eof())
-		{
+		while (!in.eof()) {
 			std::string line;
 			std::getline(in, line);
 			if (!line.empty())
@@ -99,8 +105,7 @@ namespace io
 		auto in = std::ifstream{ getFilePath(fileName) };
 
 		auto values = std::vector<std::vector<std::string>>{};
-		while (!in.eof())
-		{
+		while (!in.eof()) {
 			std::string line;
 			std::getline(in, line);
 			if (!line.empty())
@@ -112,8 +117,7 @@ namespace io
 	void display(std::ostream& out, const std::vector<std::int64_t>& values, const std::string& suffix)
 	{
 		out << "[";
-		if (!values.empty())
-		{
+		if (!values.empty()) {
 			out << values[0];
 			for (size_t i = 1; i < values.size(); ++i)
 				out << ", " << values[i];
