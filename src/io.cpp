@@ -52,7 +52,7 @@ namespace io {
 
 		auto values = std::vector<std::int64_t>{};
 		for (const auto& strValue : strValues)
-			values.push_back(std::atoi(strValue.c_str()));
+			values.push_back(std::atoll(strValue.c_str()));
 		return values;
 	}
 

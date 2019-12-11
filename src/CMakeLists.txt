@@ -11,6 +11,8 @@ add_library (Password password.cpp password.h)
 add_library (Orbits orbits.cpp orbits.h)
 add_library (Image image.cpp image.h)
 add_library (Asteroid asteroid.cpp asteroid.h)
+target_link_libraries (Asteroid IO Image)
+add_library (Robot robot.cpp robot.h)
 
 add_executable (Day1 day1.cpp)
 target_link_libraries (Day1 Fuel IO Test)
@@ -40,4 +42,7 @@ add_executable (Day9 day9.cpp)
 target_link_libraries (Day9 OpCode IO Test)
 
 add_executable (Day10 day10.cpp)
-target_link_libraries (Day10 Asteroid IO Test)
+target_link_libraries (Day10 Asteroid Test)
+
+add_executable (Day11 day11.cpp)
+target_link_libraries (Day11 Robot OpCode Image IO Test)

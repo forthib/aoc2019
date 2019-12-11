@@ -121,8 +121,8 @@ int main(int argc, char* argv[])
 	    18216);
 
 	const auto code = io::readLineOfIntegers("day7_input.txt");
-	std::cout << "Part 1:" << getMaxSignal1(code) << "\n";
-	std::cout << "Part 2:" << getMaxSignal2(code) << "\n";
+	std::cout << "Part 1: " << getMaxSignal1(code) << "\n";
+	std::cout << "Part 2: " << getMaxSignal2(code) << "\n";
 
 	std::cin.get();
 }
