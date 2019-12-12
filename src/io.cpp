@@ -19,7 +19,8 @@ namespace io {
 			while (it != end(s) && !contains(separators, *it))
 				++it;
 
-			result.emplace_back(first, it);
+			if (first != it)
+				result.emplace_back(first, it);
 
 			if (it == end(s))
 				break;
@@ -56,6 +57,24 @@ namespace io {
 		return values;
 	}
 
+	std::vector<std::vector<std::int64_t>> readLinesOfIntegers(const std::string& fileName, const std::string& separators)
+	{
+		auto in = std::ifstream{ getFilePath(fileName) };
+
+		auto values = std::vector<std::vector<std::int64_t>>{};
+		while (!in.eof()) {
+			std::string line;
+			std::getline(in, line);
+			if (!line.empty()) {
+				values.emplace_back();
+				const auto strValues = split(line, separators);
+				for (const auto& strValue : strValues)
+					values.back().push_back(std::atoll(strValue.c_str()));
+			}
+		}
+		return values;
+	}
+
 	std::vector<std::int64_t> readLineOfDigits(const std::string& fileName)
 	{
 		auto in = std::ifstream{ getFilePath(fileName) };
@@ -86,9 +105,9 @@ namespace io {
 		return values;
 	}
 
-	std::vector<std::string> readLinesOfString(const std::string& fileName)
+	std::vector<std::string> readLinesOfString(const std::string& fileName, bool fullPath)
 	{
-		auto in = std::ifstream{ getFilePath(fileName) };
+		auto in = std::ifstream{ fullPath ? fileName : getFilePath(fileName) };
 
 		auto values = std::vector<std::string>{};
 		while (!in.eof()) {
@@ -100,9 +119,9 @@ namespace io {
 		return values;
 	}
 
-	std::vector<std::vector<std::string>> readLinesOfStrings(const std::string& fileName, const std::string& separators)
+	std::vector<std::vector<std::string>> readLinesOfStrings(const std::string& fileName, const std::string& separators, bool fullPath)
 	{
-		auto in = std::ifstream{ getFilePath(fileName) };
+		auto in = std::ifstream{ fullPath ? fileName : getFilePath(fileName) };
 
 		auto values = std::vector<std::vector<std::string>>{};
 		while (!in.eof()) {
