@@ -67,6 +67,9 @@ namespace image {
 	template<typename T, typename U, typename V, typename Function>
 	Image<T> transform(const Image<U>& inputImage1, const Image<V>& inputImage2, Function function);
 
+	template<typename T> Image<T> resized(const Image<T>& image, size_t width, size_t height, T defaultValue = {});
+	template<typename T> void     resize(Image<T>& image, size_t width, size_t height, T defaultValue = {});
+
 	std::vector<Image<std::int64_t>> splitLayers(size_t width, size_t height, const std::vector<std::int64_t>& data);
 
 	size_t getCheckValue(const std::vector<Image<std::int64_t>>& layers);
@@ -132,5 +135,20 @@ namespace image {
 	Image<T> transform(const Image<U>& inputImage1, const Image<V>& inputImage2, Function function)
 	{
 		return transformIJ<T>(inputImage1, inputImage2, [&](const IJ&, const auto& value1, const auto& value2) { return function(value1, value2); });
+	}
+
+	template<typename T> Image<T> resized(const Image<T>& image, size_t width, size_t height, T defaultValue)
+	{
+		auto result = Image<T>{ width, height, defaultValue };
+		for (size_t j = 0; j < image.getHeight(); ++j)
+			for (size_t i = 0; i < image.getWidth(); ++i)
+				if (j < height && i < width)
+					result(i, j) = image(i, j);
+		return result;
+	}
+
+	template<typename T> void resize(Image<T>& image, size_t width, size_t height, T defaultValue)
+	{ //
+		image = resized(image, width, height, defaultValue);
 	}
 }

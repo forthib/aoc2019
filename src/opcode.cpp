@@ -219,6 +219,12 @@ namespace opcode {
 		return outputs;
 	}
 
+	void run(const std::vector<std::int64_t>& code, std::vector<std::int64_t>& inputs, std::vector<std::int64_t>& outputs)
+	{
+		auto codeCopy = code;
+		return run(codeCopy, inputs, outputs);
+	}
+
 	void run(std::vector<std::int64_t>& code, std::vector<std::int64_t>& inputs, std::vector<std::int64_t>& outputs)
 	{
 		const auto inputFunction = [&inputs]() {
@@ -228,6 +234,12 @@ namespace opcode {
 		};
 		const auto outputFunction = [&outputs](std::int64_t value) { outputs.push_back(value); };
 		run(code, inputFunction, outputFunction);
+	}
+
+	void run(const std::vector<std::int64_t>& code, std::function<std::int64_t()> inputFunction, std::function<void(std::int64_t)> outputFunction)
+	{
+		auto codeCopy = code;
+		return run(codeCopy, std::move(inputFunction), std::move(outputFunction));
 	}
 
 	void run(std::vector<std::int64_t>& code, std::function<std::int64_t()> inputFunction, std::function<void(std::int64_t)> outputFunction)
