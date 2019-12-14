@@ -15,6 +15,8 @@ target_link_libraries (Asteroid IO Image)
 add_library (Robot robot.cpp robot.h)
 add_library (Moon moon.cpp moon.h)
 target_link_libraries (Moon IO)
+add_library (Reaction reaction.cpp reaction.h)
+target_link_libraries (Reaction IO)
 
 add_executable (Day1 day1.cpp)
 target_link_libraries (Day1 Fuel IO Test)
@@ -54,3 +56,6 @@ target_link_libraries (Day12 Moon IO Test)
 
 add_executable (Day13 day13.cpp)
 target_link_libraries (Day13 OpCode Image IO Test)
+
+add_executable (Day14 day14.cpp)
+target_link_libraries (Day14 Reaction Test)
