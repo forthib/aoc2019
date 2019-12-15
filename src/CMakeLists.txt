@@ -59,3 +59,6 @@ target_link_libraries (Day13 OpCode Image IO Test)
 
 add_executable (Day14 day14.cpp)
 target_link_libraries (Day14 Reaction Test)
+
+add_executable (Day15 day15.cpp)
+target_link_libraries (Day15 Robot OpCode Image IO)
