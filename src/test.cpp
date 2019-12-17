@@ -1,5 +1,7 @@
 #include "test.h"
 
+#include <string>
+
 namespace test {
 	void isTrue(bool value)
 	{
@@ -23,5 +25,10 @@ namespace test {
 	{
 		if (values != expectedValues)
 			throw std::exception{ "values and expected values are different" };
+	}
+
+	void equals(const char* values, const char* expectedValues)
+	{ //
+		equals(std::string{ values }, std::string{ expectedValues });
 	}
 }
