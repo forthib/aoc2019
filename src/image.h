@@ -24,6 +24,14 @@ namespace image {
 	inline bool operator<=(const IJ& lhs, const IJ& rhs) { return toTuple(lhs) <= toTuple(rhs); }
 	inline bool operator>=(const IJ& lhs, const IJ& rhs) { return toTuple(lhs) >= toTuple(rhs); }
 
+	inline size_t hashCode(const IJ& ij) noexcept
+	{
+		size_t seed = 0;
+		boost::hash_combine(seed, ij.i);
+		boost::hash_combine(seed, ij.j);
+		return seed;
+	}
+
 	template<typename T> class Image
 	{
 	public:
@@ -38,6 +46,8 @@ namespace image {
 		size_t getIndex(const IJ& ij) const { return getIndex(ij.i, ij.j); }
 		IJ     getIJ(size_t index) const { return { index % width_, index / width_ }; }
 
+		bool isValid(const IJ& ij) const { return ij.i < width_ && ij.j < height_; }
+
 		decltype(auto) operator()(size_t index) const { return data_[index]; }
 		decltype(auto) operator()(size_t index) { return data_[index]; }
 		decltype(auto) operator()(size_t i, size_t j) const { return data_[getIndex(i, j)]; }
@@ -49,6 +59,20 @@ namespace image {
 		decltype(auto) begin() { return data_.begin(); }
 		decltype(auto) end() const { return data_.end(); }
 		decltype(auto) end() { return data_.end(); }
+
+		auto asTuple() const { return std::tie(width_, height_, data_); }
+
+		friend bool operator==(const Image& lhs, const Image& rhs) { return lhs.asTuple() == rhs.asTuple(); }
+		friend bool operator!=(const Image& lhs, const Image& rhs) { return lhs.asTuple() != rhs.asTuple(); }
+
+		size_t hashCode() const noexcept
+		{
+			size_t seed = 0;
+			boost::hash_combine(seed, width_);
+			boost::hash_combine(seed, width_);
+			boost::hash_combine(seed, data_);
+			return seed;
+		}
 
 	private:
 		size_t         width_, height_;
@@ -80,13 +104,12 @@ namespace image {
 namespace std {
 	template<> struct hash<image::IJ>
 	{
-		size_t operator()(const image::IJ& ij) const noexcept
-		{
-			size_t seed = 0;
-			boost::hash_combine(seed, ij.i);
-			boost::hash_combine(seed, ij.j);
-			return seed;
-		}
+		size_t operator()(const image::IJ& ij) const noexcept { return hashCode(ij); }
+	};
+
+	template<typename T> struct hash<image::Image<T>>
+	{
+		size_t operator()(const image::Image<T>& image) const noexcept { return image.hashCode(); }
 	};
 }
 
