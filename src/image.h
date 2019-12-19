@@ -48,6 +48,28 @@ namespace image {
 
 		bool isValid(const IJ& ij) const { return ij.i < width_ && ij.j < height_; }
 
+		size_t findIndex(const T& value) const { return std::find(data_.begin(), data_.end(), value) - data_.begin(); }
+		IJ     findIJ(const T& value) const { return getIJ(findIndex(value)); }
+
+		std::vector<size_t> findIndexes(const T& value) const
+		{
+			auto result = std::vector<size_t>{};
+			auto it     = std::find(data_.begin(), data_.end(), value);
+			while (it != data_.end()) {
+				result.push_back(it - data_.begin());
+				it = std::find(it + 1, data_.end(), value);
+			}
+			return result;
+		}
+
+		std::vector<IJ> findIJs(const T& value) const
+		{
+			auto result = std::vector<IJ>{};
+			for (const auto index : findIndexes(value))
+				result.push_back(getIJ(index));
+			return result;
+		}
+
 		decltype(auto) operator()(size_t index) const { return data_[index]; }
 		decltype(auto) operator()(size_t index) { return data_[index]; }
 		decltype(auto) operator()(size_t i, size_t j) const { return data_[getIndex(i, j)]; }
