@@ -15,14 +15,12 @@ namespace graph {
 
 	template<typename V> struct Graph
 	{
-		std::vector<V>       vertices;
-		image::Image<size_t> edges{ 0, 0 };
+		std::vector<V>                vertices;
+		std::unordered_map<V, size_t> vertexToIndex;
+		image::Image<size_t>          edges{ 0, 0 };
 	};
 
-	template<typename V> size_t getVertexIndex(const Graph<V>& g, const V& v)
-	{
-		return std::distance(g.vertices.begin(), std::find(g.vertices.begin(), g.vertices.end(), v));
-	}
+	template<typename V> size_t getVertexIndex(const Graph<V>& g, const V& v) { return g.vertexToIndex.at(v); }
 
 	template<typename V> size_t getEdgeWeight(const Graph<V>& g, const V& v1, const V& v2)
 	{
@@ -43,11 +41,16 @@ namespace graph {
 	{
 		const size_t index = g.vertices.size();
 		g.vertices.push_back(std::move(v));
+		g.vertexToIndex[v] = index;
 		resize(g.edges, index + 1, index + 1, std::numeric_limits<size_t>::max());
 		return index;
 	}
 
-	template<typename V> void setVertex(Graph<V>& g, size_t iV, V v) { g.vertices[iV] = std::move(v); }
+	template<typename V> void setVertex(Graph<V>& g, size_t iV, V v)
+	{
+		g.vertices[iV]     = std::move(v);
+		g.vertexToIndex[v] = iV;
+	}
 
 	template<typename V> void addEdge(Graph<V>& g, const V& v1, const V& v2, size_t weight = 1)
 	{
@@ -56,25 +59,42 @@ namespace graph {
 		g.edges(iV1, iV2) = weight;
 	}
 
-	template<typename V> void display(const Graph<V>& g, std::ostream& out = std::cout)
+	template<typename V, typename VDisplay> void display(const Graph<V>& g, std::ostream& out, VDisplay vDisplay)
 	{
 		for (size_t iV1 = 0; iV1 < g.vertices.size(); ++iV1) {
-			out << g.vertices[iV1] << " ->";
+			vDisplay(out, g.vertices[iV1]) << " ->";
 			for (size_t iV2 = 0; iV2 < g.vertices.size(); ++iV2)
 				if (g.edges(iV1, iV2) != std::numeric_limits<size_t>::max())
-					out << " " << g.vertices[iV2] << ":" << g.edges(iV1, iV2);
+					vDisplay(out << " ", g.vertices[iV2]) << ":" << g.edges(iV1, iV2);
 			out << "\n";
 		}
 	}
 
+	template<typename V> void display(const Graph<V>& g, std::ostream& out = std::cout)
+	{
+		return display(g, out, [](auto& out, const auto& v) -> std::ostream& { return out << v; });
+	}
+
+	template<typename U, typename V, typename Function> Graph<U> transform(const Graph<V>& graph, Function function)
+	{
+		auto result = Graph<U>{};
+		for (const auto& v : graph.vertices)
+			result.vertices.push_back(function(v));
+		for (auto&& entry : graph.vertexToIndex)
+			result.vertexToIndex[function(entry.first)] = entry.second;
+		result.edges = graph.edges;
+		return result;
+	}
+
 	template<typename V> struct Exploration
 	{
-		std::vector<V>      vertices;
-		std::vector<size_t> distances;
-		std::vector<size_t> predecessors;
+		std::vector<V>                vertices;
+		std::unordered_map<V, size_t> vertexToIndex;
+		std::vector<size_t>           distances;
+		std::vector<size_t>           predecessors;
 	};
 
-	template<typename V> Exploration<V> explore(const Graph<V>& g, const V& from)
+	template<typename V> std::vector<Exploration<V>> explore(const Graph<V>& g, const std::vector<V>& froms)
 	{
 		using BWeightProperty = boost::property<boost::edge_weight_t, size_t>;
 		using BNameProperty   = boost::property<boost::vertex_name_t, size_t>;
@@ -88,18 +108,23 @@ namespace graph {
 				if (g.edges(iV1, iV2) != std::numeric_limits<size_t>::max())
 					add_edge(iV1, iV2, g.edges(iV1, iV2), bg);
 
-		auto result     = Exploration<V>{};
-		result.vertices = g.vertices;
-		result.distances.resize(g.vertices.size());
-		result.predecessors.resize(g.vertices.size());
-		dijkstra_shortest_paths(bg, getVertexIndex(g, from), boost::predecessor_map(result.predecessors.data()).distance_map(result.distances.data()));
+		auto result = std::vector<Exploration<V>>{};
+		for (const auto& from : froms) {
+			auto exploration          = Exploration<V>{};
+			exploration.vertices      = g.vertices;
+			exploration.vertexToIndex = g.vertexToIndex;
+			exploration.distances.resize(g.vertices.size());
+			exploration.predecessors.resize(g.vertices.size());
+			dijkstra_shortest_paths(
+			    bg, getVertexIndex(g, from), boost::predecessor_map(exploration.predecessors.data()).distance_map(exploration.distances.data()));
+			result.push_back(exploration);
+		}
 		return result;
 	}
 
-	template<typename V> size_t getVertexIndex(const Exploration<V>& e, const V& v)
-	{
-		return std::distance(e.vertices.begin(), std::find(e.vertices.begin(), e.vertices.end(), v));
-	}
+	template<typename V> Exploration<V> explore(const Graph<V>& g, const V& from) { return explore(g, std::vector<V>{ from }).front(); }
+
+	template<typename V> size_t getVertexIndex(const Exploration<V>& e, const V& v) { return e.vertexToIndex.at(v); }
 
 	template<typename V> size_t getDistance(const Exploration<V>& e, const V& to)
 	{
