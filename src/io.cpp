@@ -144,6 +144,17 @@ namespace io {
 		out << "]" << suffix;
 	}
 
+	void display(std::ostream& out, const std::vector<std::uint64_t>& values, const std::string& suffix)
+	{
+		out << "[";
+		if (!values.empty()) {
+			out << values[0];
+			for (size_t i = 1; i < values.size(); ++i)
+				out << ", " << values[i];
+		}
+		out << "]" << suffix;
+	}
+
 	std::string toString(const std::vector<std::int64_t>& values)
 	{
 		std::ostringstream out;

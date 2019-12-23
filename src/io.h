@@ -23,5 +23,7 @@ namespace io {
 
 	void display(std::ostream& out, const std::vector<std::int64_t>& values, const std::string& suffix = "\n");
 
+	void display(std::ostream& out, const std::vector<std::uint64_t>& values, const std::string& suffix = "\n");
+
 	std::string toString(const std::vector<std::int64_t>& values);
 }
