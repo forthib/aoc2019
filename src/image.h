@@ -35,6 +35,7 @@ namespace image {
 	template<typename T> class Image
 	{
 	public:
+		Image() : width_{ 0 }, height_{ 0 } {}
 		Image(size_t width, size_t height, T defaultValue = {}) : width_{ width }, height_{ height }, data_(width * height, defaultValue) {}
 		Image(size_t width, size_t height, std::vector<T> data) : width_{ width }, height_{ height }, data_{ std::move(data) } {}
 
@@ -81,6 +82,11 @@ namespace image {
 		decltype(auto) begin() { return data_.begin(); }
 		decltype(auto) end() const { return data_.end(); }
 		decltype(auto) end() { return data_.end(); }
+
+		decltype(auto) rbegin() const { return data_.rbegin(); }
+		decltype(auto) rbegin() { return data_.rbegin(); }
+		decltype(auto) rend() const { return data_.rend(); }
+		decltype(auto) rend() { return data_.rend(); }
 
 		auto asTuple() const { return std::tie(width_, height_, data_); }
 
