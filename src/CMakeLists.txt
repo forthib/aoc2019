@@ -89,3 +89,6 @@ target_link_libraries (Day23 OpCode IO Image Test)
 
 add_executable (Day24 day24.cpp)
 target_link_libraries (Day24 IO Image Test)
+
+add_executable (Day25 day25.cpp)
+target_link_libraries (Day25 OpCode IO Image Test)
